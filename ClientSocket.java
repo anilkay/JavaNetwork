@@ -2,17 +2,28 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class ClientSocket {
-    public static void main(String args[]) {
-        Socket link = null;
+/**
+ *
+ * @author user2
+ */
+public class ClientSocket{
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Socket socket=null;
         try {
-            link = new Socket(InetAddress.getLocalHost(), 1234);
-            Scanner input = new Scanner(link.getInputStream());
-            PrintWriter output = new PrintWriter(link.getOutputStream(), true);
+            socket=new Socket(InetAddress.getByName("192.168.2.5"),1234);
+             PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
             Scanner user = new Scanner(System.in);
             String message, response;
+            Scanner input=new Scanner(socket.getInputStream());
             do {
                 System.out.println("Enter message:");
                 message = user.nextLine();
@@ -21,8 +32,11 @@ public class ClientSocket {
                 response = input.nextLine();
                 System.out.println("response:"+response);
             } while (!message.equals("***"));
-        } catch (IOException e) {
-            System.out.println("Houston there has a problem\n" + e.toString());
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(Hapsu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Hapsu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
 }
